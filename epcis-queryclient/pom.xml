@@ -1,0 +1,301 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- =========================================================== -->
+  <!-- Basics                                                      -->
+  <!-- =========================================================== -->
+
+  <groupId>org.fosstrak.epcis</groupId>
+  <artifactId>epcis-queryclient</artifactId>
+  <version>0.5.0</version>
+  <parent>
+    <artifactId>epcis</artifactId>
+    <groupId>org.fosstrak.epcis</groupId>
+    <version>0.5.0</version>
+  </parent>
+  <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <name>epcis-queryclient</name>
+
+  <properties>
+    <lib-cxf-version>2.2.9</lib-cxf-version>
+  </properties>
+
+
+  <!-- =========================================================== -->
+  <!-- Dependencies                                                -->
+  <!-- =========================================================== -->
+
+  <dependencies>
+    <dependency>
+      <groupId>org.fosstrak.epcis</groupId>
+      <artifactId>epcis-commons</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- CXF dependencies - only minimal set of transitive dependencies included -->
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-frontend-jaxws</artifactId>
+      <version>${lib-cxf-version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-javamail_1.4_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-activation_1.1_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>velocity</groupId>
+          <artifactId>velocity</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.neethi</groupId>
+          <artifactId>neethi</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>asm</groupId>
+          <artifactId>asm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-beans</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-web</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-transports-http</artifactId>
+      <version>${lib-cxf-version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>asm</groupId>
+          <artifactId>asm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-beans</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-web</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-databinding-jaxb</artifactId>
+      <version>${lib-cxf-version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-javamail_1.4_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-activation_1.1_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.sun.xml.bind</groupId>
+          <artifactId>jaxb-xjc</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>velocity</groupId>
+          <artifactId>velocity</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>asm</groupId>
+          <artifactId>asm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-beans</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+
+  <!-- =========================================================== -->
+  <!-- Build settings                                              -->
+  <!-- =========================================================== -->
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Class-Path>.</Class-Path>
+            </manifestEntries>
+            <manifest>
+              <mainClass>org.fosstrak.epcis.queryclient.QueryClientGui</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>./lib</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/bin-with-dependencies.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <!--
+           This plugin generates the webstart app, the template for the
+           jnlp file is taken from src/jnlp/template.vm.
+           The plugin will be executed during the deploy phase, otherwise
+           an error will occur!
+        -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>webstart-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>deploy</phase>
+            <goals>
+              <goal>jnlp</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <workDirectory>${project.build.directory}/site/webstart</workDirectory>
+          <dependencies>
+            <!--
+               Exclude everything that is not absulutely necessary in order to
+               keep the footprint as small and the download as quick as possible.
+            -->
+            <excludes>
+              <exclude>javax.mail:mail</exclude>
+            </excludes>
+          </dependencies>
+          <jnlp>
+            <outputFile>epcis-queryclient.jnlp</outputFile>
+            <mainClass>org.fosstrak.epcis.queryclient.QueryClientGui</mainClass>
+          </jnlp>
+          <!-- kestore management (do not generate a new kestore) -->
+          <keystore>
+            <delete>false</delete>
+            <gen>false</gen>
+          </keystore>
+          <sign>
+            <!--
+               values are provided via command line using -Dkeystore=... etc,
+               or may be specified as properties in a profile in your settings.xml
+               file like so
+               <profile>
+                 <id>webstart</id>
+                 <properties>
+                   <keystore>...</keystore>
+                   <storepass>...</storepass>
+                   <keypass>...</keypass>
+                   <alias>...</alias>
+                 </properties>
+               </profile>
+            -->
+            <keystore>${keystore}</keystore>
+            <keypass>${keypass}</keypass>
+            <storepass>${storepass}</storepass>
+            <alias>${alias}</alias>
+            <storetype>jks</storetype>
+            <verify>true</verify>
+          </sign>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+
+  <!-- =========================================================== -->
+  <!-- Reporting                                                   -->
+  <!-- =========================================================== -->
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <includes>**/*.java</includes>
+          <excludes>org/fosstrak/epcis/soapapi/*.*</excludes>
+          <configLocation>${basedir}/../src/config/epcis_checks.xml</configLocation>
+          <enableRulesSummary>false</enableRulesSummary>
+          <propertyExpansion>samedir=${basedir}/../src/config</propertyExpansion>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.1</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- Can't reliably build site with dependencies report enabled. -->
+              <!-- <report>dependencies</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

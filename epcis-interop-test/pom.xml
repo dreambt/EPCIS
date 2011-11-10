@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- 
+    The tests contained in this module are excluded from the default
+    maven lifecycle test phase! If you want to execute the tests manually
+    you need to run the following command:
+        mvn test -Dtest=*
+    Note: the tests require a locally running EPCIS repository!
+  -->
+
+  <!-- =========================================================== -->
+  <!-- Basics                                                      -->
+  <!-- =========================================================== -->
+
+  <groupId>org.fosstrak.epcis</groupId>
+  <artifactId>epcis-interop-test</artifactId>
+  <version>0.5.0</version>
+  <parent>
+    <artifactId>epcis</artifactId>
+    <groupId>org.fosstrak.epcis</groupId>
+    <version>0.5.0</version>
+  </parent>
+  <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <name>epcis-interop-test</name>
+
+
+  <!-- =========================================================== -->
+  <!-- Dependencies                                                -->
+  <!-- =========================================================== -->
+
+  <dependencies>
+    <dependency>
+      <groupId>org.fosstrak.epcis</groupId>
+      <artifactId>epcis-commons</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- used to run the capture tests -->
+      <groupId>org.fosstrak.epcis</groupId>
+      <artifactId>epcis-captureclient</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- used to run the query tests -->
+      <groupId>org.fosstrak.epcis</groupId>
+      <artifactId>epcis-queryclient</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>[3.8,4)</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dbunit</groupId>
+      <artifactId>dbunit</artifactId>
+      <version>2.4.7</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- required by dbunit for using commons-logging -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jcl</artifactId>
+      <version>1.5.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- required by dbunit to access the db -->
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.13</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+
+  <!-- =========================================================== -->
+  <!-- Build settings                                              -->
+  <!-- =========================================================== -->
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- by default, exclude all tests (see note above) -->
+          <excludes>
+            <exclude>**/*.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+
+  <!-- =========================================================== -->
+  <!-- Reporting                                                   -->
+  <!-- =========================================================== -->
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.1</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- Can't reliably build site with dependencies report enabled. -->
+              <!-- <report>dependencies</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

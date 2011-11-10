@@ -1,0 +1,126 @@
+1.EPCISMasterDataDocument 
+
+Master data is additional data that provides the necessary context for 
+interpreting the event data. 
+The following example shows master data for a business location and read ponints:
+
+
+
+
+// create a <VocabularyElement> which contains two <attribute> elements
+VocabularyElementType vocElem = new VocabularyElementType();
+vocElem.setId("urn:epc:id:sgln:0037000.00729.0");
+AttributeType attr1 = new AttributeType();
+attr1.setId("urn:epcglobal:fmcg:mda:latitude");
+attr1.getContent().add("+18.0000");
+AttributeType attr2 = new AttributeType();
+attr2.setId("urn:epcglobal:fmcg:mda:longitude");
+attr2.getContent().add("-70.0000");
+vocElem.getAttribute().add(attr1);
+vocElem.getAttribute().add(attr2);
+
+// create a <Vocabulary> element of type 'BusinessLocation' and add a list of vocabulary elements
+VocabularyType voc = new VocabularyType();
+voc.setType("urn:epcglobal:epcis:vtype:BusinessLocation");
+VocabularyElementListType vocElemList = new VocabularyElementListType();
+vocElemList.getVocabularyElement().add(vocElem);
+voc.setVocabularyElementList(vocElemList);
+VocabularyListType vocList = new VocabularyListType();
+vocList.getVocabulary().add(voc);
+
+// create the EPCISMasterDataDocument
+EPCISMasterDataDocumentType masterDataDoc = new EPCISMasterDataDocumentType();
+masterDataDoc.setSchemaVersion(new BigDecimal("1.0"));
+masterDataDoc.setCreationDate(getCurrentDateTime());
+EPCISMasterDataBodyType masterDataBody = new EPCISMasterDataBodyType();
+masterDataBody.setVocabularyList(vocList);
+masterDataDoc.setEPCISBody(masterDataBody);
+
+// get the capture client and capture the event
+String captureUrl = new String("http://localhost:8080/epcis-repository/capture");
+CaptureClient client = new CaptureClient(captureUrl);
+int httpResponseCode = client.capture(masterDataDoc);
+if (httpResponseCode != 200) {
+    System.out.println("The event could NOT be captured!");
+}
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<epcismd:EPCISMasterDataDocument xmlns:epcismd="urn:epcglobal:epcis-masterdata:xsd:1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1" creationDate="2005-07-11T11:30:47.0Z">
+<EPCISBody>
+  <VocabularyList>
+    <Vocabulary type="urn:epcglobal:epcis:vtype:BusinessLocation">
+      <VocabularyElementList>
+        <VocabularyElement id="urn:epc:id:sgln:0037000.00729.0">
+          <attribute id="urn:epcglobal:fmcg:mda:slt:retail"/>
+          <attribute id="urn:epcglobal:fmcg:mda:latitude" value="+18.0000"/>
+          <attribute id="urn:epcglobal:fmcg:mda:longitude" value="-70.0000"/>
+          <attribute id="urn:epcglobal:fmcg:mda:address">100 Nowhere Street, FancyCity 99999</attribute>
+        </VocabularyElement>
+        <VocabularyElement id="urn:epcglobal:fmcg:ssl:0037000.00729.201">
+          <attribute id="urn:epcglobal:fmcg:mda:sslt:201"/>
+        </VocabularyElement>
+        <VocabularyElement id="urn:epcglobal:fmcg:ssl:0037000.00729.202">
+          <attribute id="urn:epcglobal:fmcg:mda:sslt:202"/>
+        </VocabularyElement>
+        <VocabularyElement id="urn:epcglobal:fmcg:ssl:0037000.00729.202,402">
+          <attribute id="urn:epcglobal:fmcg:mda:sslt:202"/>
+          <attribute id="urn:epcglobal:fmcg:mda:sslta:402"/>
+        </VocabularyElement>
+      </VocabularyElementList>
+    </Vocabulary>
+    <Vocabulary type="urn:epcglobal:epcis:vtype:ReadPoint">
+      <VocabularyElementList>
+        <VocabularyElement id="urn:epcglobal:fmcg:ssl:0037000.00729.201">
+          <attribute id="urn:epcglobal:epcis:mda:site">urn:epc:id:sgln:0037000.00729.0</attribute>
+          <attribute id="urn:epcglobal:fmcg:mda:sslt:201"/>
+        </VocabularyElement>
+        <VocabularyElement id="urn:epcglobal:fmcg:ssl:0037000.00729.202">
+          <attribute id="urn:epcglobal:epcis:mda:site">urn:epc:id:sgln:0037000.00729.0</attribute>
+          <attribute id="urn:epcglobal:fmcg:mda:sslt:202"/>
+        </VocabularyElement>
+        <VocabularyElement id="urn:epcglobal:fmcg:ssl:0037000.00729.203">
+          <attribute id="urn:epcglobal:epcis:mda:site">urn:epc:id:sgln:0037000.00729.0</attribute>
+          <attribute id="urn:epcglobal:fmcg:mda:sslt:203"/>
+        </VocabularyElement>
+      </VocabularyElementList>
+    </Vocabulary>
+  </VocabularyList>
+</EPCISBody>
+</epcismd:EPCISMasterDataDocument>
+
+
+
+
+
+2.
+
+
+mode	description
+1 	insert a new vocabulary element      (default)
+2	change a vocabulary element's URI
+3	delete a single vocabulary element
+4	delete a vocabulary element including all its descendants
+
+
+So, in order to delete the vocabulary with id urn:epc:id:sgln:0037000.00729.0 
+which has been previously added, the following EPCISMasterDataDocument should be 
+sent to the repository (note the attribute mode="3" in the <VocabularyElement> element):
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<epcismd:EPCISMasterDataDocument xmlns:epcismd="urn:epcglobal:epcis-masterdata:xsd:1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1">
+    <EPCISBody>
+        <VocabularyList>
+            <Vocabulary type="urn:epcglobal:epcis:vtype:BusinessLocation">
+                <VocabularyElementList>
+                    <VocabularyElement id="urn:epc:id:sgln:0037000.00729.0" mode="3" />
+                </VocabularyElementList>
+            </Vocabulary>
+        </VocabularyList>
+    </EPCISBody>
+</epcismd:EPCISMasterDataDocument>

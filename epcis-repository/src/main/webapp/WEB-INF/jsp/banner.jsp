@@ -1,0 +1,2 @@
+<div id="banner">
+</div>

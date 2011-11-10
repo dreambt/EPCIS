@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+    <properties>
+        <title>Changes epcis-commons</title>
+    </properties>
+    <body>
+        <release version="0.5" date="2011-11-11" description="Bug fix and feature release">
+            <action dev="baitao.jibt" date="2011-11-09" type="update">
+                Updated CXF dependencies to 2.2.9 and JAXB to 2.2
+            </action>
+        </release>
+    </body>
+</document>

@@ -1,0 +1,13 @@
+<atlassian-ide-plugin>
+  <project-configuration>
+    <servers>
+      <jira>
+        <server-id>2b015ead-ca81-4214-a514-35c93447cd5c</server-id>
+        <name>MiddleWare</name>
+        <url>http://210.44.139.224:8080/jira</url>
+        <shared>false</shared>
+      </jira>
+    </servers>
+    <default-jira-server>2b015ead-ca81-4214-a514-35c93447cd5c</default-jira-server>
+  </project-configuration>
+</atlassian-ide-plugin>

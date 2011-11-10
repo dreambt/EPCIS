@@ -1,0 +1,116 @@
+1.CaptureClient 
+
+
+// get the capture client and capture the event
+String captureUrl = new String("http://localhost:8080/epcis-repository-[version]/capture");
+CaptureClient client = new CaptureClient(captureUrl);
+int httpResponseCode = client.capture(event);
+if (httpResponseCode != 200) {
+    System.out.println("The event could NOT be captured!");
+}
+
+
+
+2.use the org.fosstrak.epcis.model package to create an EPCISDocumentType instance:
+
+
+ObjectEventType objEvent = new ObjectEventType();
+
+// get the current time and set the eventTime
+XMLGregorianCalendar now = null;
+try {
+    DatatypeFactory dataFactory = DatatypeFactory.newInstance();
+    now = dataFactory.newXMLGregorianCalendar(new GregorianCalendar());
+    objEvent.setEventTime(now);
+} catch (DatatypeConfigurationException e) {
+    e.printStackTrace();
+}
+
+// get the current time zone and set the eventTimeZoneOffset
+if (now != null) {
+    int timezone = now.getTimezone();
+    int h = Math.abs(timezone / 60);
+    int m = Math.abs(timezone % 60);
+    DecimalFormat format = new DecimalFormat("00");
+    String sign = (timezone < 0) ? "-" : "+";
+    objEvent.setEventTimeZoneOffset(sign + format.format(h) + ":" + format.format(m));
+}
+
+// set EPCs
+EPC epc = new EPC();
+epc.setValue("urn:epc:id:sgtin:0614141.107346.2017");
+EPCListType epcList = new EPCListType();
+epcList.getEpc().add(epc);
+objEvent.setEpcList(epcList);
+
+// set action
+objEvent.setAction(ActionType.OBSERVE);
+
+// set bizStep
+objEvent.setBizStep("urn:epcglobal:epcis:bizstep:fmcg:shipped");
+
+// set disposition
+objEvent.setDisposition("urn:epcglobal:epcis:disp:fmcg:unknown");
+
+// set readPoint
+ReadPointType readPoint = new ReadPointType();
+readPoint.setId("urn:epc:id:sgln:0614141.07346.1234");
+objEvent.setReadPoint(readPoint);
+
+// set bizLocation
+BusinessLocationType bizLocation = new BusinessLocationType();
+bizLocation.setId("urn:epcglobal:fmcg:loc:0614141073467.A23-49");
+objEvent.setBizLocation(bizLocation);
+
+// create the EPCISDocument containing a single ObjectEvent
+EPCISDocumentType epcisDoc = new EPCISDocumentType();
+EPCISBodyType epcisBody = new EPCISBodyType();
+EventListType eventList = new EventListType();
+eventList.getObjectEventOrAggregationEventOrQuantityEvent().add(objEvent);
+epcisBody.setEventList(eventList);
+epcisDoc.setEPCISBody(epcisBody);
+epcisDoc.setSchemaVersion(new BigDecimal("1.0"));
+epcisDoc.setCreationDate(now);
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<epcis:EPCISDocument
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:epcis="urn:epcglobal:epcis:xsd:1"
+    xmlns:epcglobal="urn:epcglobal:xsd:1"
+    xsi:schemaLocation="urn:epcglobal:epcis:xsd:1 EPCglobal-epcis-1_0.xsd"
+    creationDate="2008-03-16T22:13:16.397+01:00"
+    schemaVersion="1.0">
+  <EPCISBody>
+    <EventList>
+      <ObjectEvent>
+        <eventTime>2008-03-16T22:13:16.397+01:00</eventTime>
+        <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>
+        <epcList>
+          <epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+        </epcList>
+        <action>OBSERVE</action>
+        <bizStep>urn:epcglobal:epcis:bizstep:fmcg:shipped</bizStep>
+        <disposition>urn:epcglobal:epcis:disp:fmcg:unknown</disposition>
+        <readPoint>
+          <id>urn:epc:id:sgln:0614141.07346.1234</id>
+        </readPoint>
+        <bizLocation>
+          <id>urn:epcglobal:fmcg:loc:0614141073467.A23-49</id>
+        </bizLocation>
+        <bizTransactionList>
+          <bizTransaction type="urn:epcglobal:fmcg:btt:po">
+            http://transaction.acme.com/po/12345678
+          </bizTransaction>
+        </bizTransactionList>
+      </ObjectEvent>
+    </EventList>
+  </EPCISBody>
+</epcis:EPCISDocument>

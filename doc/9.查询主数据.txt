@@ -1,0 +1,56 @@
+1.QueryControlClient
+
+The queryName must be "SimpleMasterDataQuery"!!!
+
+
+
+// construct the query parameters
+QueryParam queryParam1 = new QueryParam();
+queryParam1.setName("includeAttributes");
+queryParam1.setValue("true");
+
+QueryParam queryParam2 = new QueryParam();
+queryParam2.setName("includeChildren");
+queryParam2.setValue("true");
+
+QueryParam queryParam3 = new QueryParam();
+queryParam3.setName("EQ_name");
+ArrayOfString queryParamValue3 = new ArrayOfString();
+queryParamValue3.getString().add("urn:epc:id:sgln:0614141.00729.shipping");
+queryParam3.setValue(queryParamValue3);
+
+// add the query parameters to the list of parameters
+QueryParams queryParams = new QueryParams();
+queryParams.getParam().add(queryParam1);
+queryParams.getParam().add(queryParam2);
+queryParams.getParam().add(queryParam3);
+
+// create the Poll object and send it to the query service
+Poll poll = new Poll();
+poll.setQueryName("SimpleMasterDataQuery");
+poll.setParams(queryParams);
+
+QueryResults results = client.poll(poll);
+
+
+
+
+
+
+<epcisq:Poll xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">
+  <queryName>SimpleMasterDataQuery</queryName>
+  <params>
+    <param>
+      <name>includeAttributes</name>
+      <value>true</value>
+    </param>
+    <param>
+      <name>includeChildren</name>
+      <value>true</value>
+    </param>
+    <param>
+      <name>EQ_name</name>
+      <value><string>urn:epc:id:sgln:0614141.00729.shipping</string></value>
+    </param>
+  </params>
+</epcisq:Poll>

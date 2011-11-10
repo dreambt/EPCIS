@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  antiResourceLocking="true" prevents JAR-file locking on Windows systems and
+  allows clean undeploys but also impacts application startup time. This flag
+  can be omitted on non-Windows systems.
+ -->
+<Context path="/epcis" reloadable="true" antiResourceLocking="true">
+
+  <!--
+     Parameters defined here are 'initial parameters' which are loaded at
+     startup. Changes to these parameters have no effect on the running
+     application! If parameter changes should be recognized on reloading the
+     context, then put them in application.properties file.
+   -->
+
+  <Resource
+    name="jdbc/EPCISDB"
+    type="javax.sql.DataSource"
+    auth="Container"
+    username="${db.username}"
+    password="${db.password}"
+    driverClassName="com.mysql.jdbc.Driver"
+    defaultAutoCommit="false"
+    url="jdbc:mysql://localhost:3306/${db.database}?autoReconnect=true">
+  </Resource>
+
+</Context>

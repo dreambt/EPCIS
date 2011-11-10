@@ -1,0 +1,59 @@
+1.自定义扩展域
+
+If you send this XML to the repository's capture interface using HTTP POST
+(see How to Capture EPCIS Events), the my_extensionsfield extension will be 
+stored along with all the other event fields.
+
+
+
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" <b>xmlns:my_ns="http://my.unique.namespace"</b>>
+<EPCISBody>
+  <EventList>
+    <ObjectEvent>
+      <eventTime>2008-11-09T13:30:17Z</eventTime>
+      <eventTimeZoneOffset>+00:00</eventTimeZoneOffset>
+      <epcList>
+        <epc>urn:epc:id:sgtin:0057000.123780.7788</epc>
+      </epcList>
+      <action>ADD</action>
+      <bizStep>urn:fosstrak:demo:bizstep:fmcg:production</bizStep>
+      <disposition>urn:fosstrak:demo:disp:fmcg:pendingQA</disposition>
+      <readPoint>
+        <id>urn:fosstrak:demo:fmcg:ssl:0037000.00729.210,432</id>
+      </readPoint>
+      <bizLocation>
+         <id>urn:fosstrak:demo:fmcg:ssl:0037000.00729.210</id>
+      </bizLocation>
+      <my_ns:my_extensionfield>My Extension</my_ns:my_extensionfield>
+    </ObjectEvent>
+  </EventList>
+</EPCISBody>
+</epcis:EPCISDocument>
+
+
+
+
+2.如何查询扩展域
+
+You can explicitly query for events with your custom event field. 
+Make sure that the query parameter name contains your unique namespace, 
+followed by a "#", followed by the name of your event field extension, 
+as described in the EPCIS specification.
+
+
+
+<epcisq:Poll xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1">
+  <queryName>SimpleEventQuery</queryName>
+  <params>
+    <param>
+      <name>EQ_http://my.unique.namespace#my_extensionfield</name>
+      <value><string>My Extension</string></value>
+    </param>
+  </params>
+</epcisq:Poll>
+
+
+You can also use "LT_", "LE_", "GT_", or "GE_" query parameters to retrieve 
+the corresponding events. 
+Of course this would only make sense if the value of your custom event field
+was of type integer, floating point, or date/time.

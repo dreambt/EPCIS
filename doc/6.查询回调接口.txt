@@ -1,0 +1,38 @@
+1.
+After a subscription has been registered, the EPCIS repository will deliver 
+results of query executions through the Query Callback Interface. 
+
+The query results will be deliverd as HTTP POST requests to the URL specified 
+by the dest parameter in the query subscription.
+
+It is the client's responsibility to listen for the response at the given URL.
+
+
+
+
+2.QueryCallbackListener 
+
+This class implements a very simple HTTP server that listens for requests to a given URL.
+It catches any incoming POST data and delivers it to an application upon request.
+The listener can be used as follows:
+
+
+
+
+QueryCallbackListener listener = QueryCallbackListener.getInstance();
+if (!listener.isRunning()) {
+    listener.start();
+}
+synchronized (listener) {
+    try {
+        listener.wait(timeout);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+String response = listener.fetchResponse();
+
+
+
+
+

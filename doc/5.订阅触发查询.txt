@@ -1,0 +1,39 @@
+1.
+This subscribed query, executed every couple of seconds, 
+checks if incoming event data matches the trigger condition. 
+If this condition is met, the trigger fires, and the query associated with 
+the trigger will be executed.
+
+The schedule that determines when trigger condition are checked 
+can be configured in the repository's application.properties file
+
+
+
+
+
+
+
+<epcisq:Subscribe xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1">
+  <queryName>SimpleEventQuery</queryName>
+  <params>
+    <param>
+      <name>eventType</name>
+      <value>
+        <string>ObjectEvent</string>
+      </value>
+    </param>
+    <param>
+      <name>MATCH_epc</name>
+      <value>
+        <string>urn:epc:id:sgtin:1.1.0</string>
+      </value>
+    </param>
+  </params>
+  <dest>http://localhost:8888/</dest> <!-- this is where query results will be delivered to -->
+  <controls>
+    <trigger>urn:epc:id:sgtin:0614141.107340.1</trigger>
+    <initialRecordTime>2007-04-25T11:33:00.000+02:00</initialRecordTime>
+    <reportIfEmpty>false</reportIfEmpty>
+  </controls>
+  <subscriptionID>mySubscrId002</subscriptionID>
+</epcisq:Subscribe>

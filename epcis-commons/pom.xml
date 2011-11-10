@@ -1,0 +1,141 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+
+  <!-- =========================================================== -->
+  <!-- Basics                                                      -->
+  <!-- =========================================================== -->
+
+  <groupId>org.fosstrak.epcis</groupId>
+  <artifactId>epcis-commons</artifactId>
+  <version>0.5.0</version>
+  <parent>
+    <artifactId>epcis</artifactId>
+    <groupId>org.fosstrak.epcis</groupId>
+    <version>0.5.0</version>
+  </parent>
+  <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <name>epcis-commons</name>
+
+
+  <!-- =========================================================== -->
+  <!-- Dependencies                                                -->
+  <!-- =========================================================== -->
+
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>[3.8,4)</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+
+  <!-- =========================================================== -->
+  <!-- Build settings                                              -->
+  <!-- =========================================================== -->
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <!--
+            This plugin generates the java stubs (POJOs) from the WSDL file
+            using a JAXB data binding. To run this plugin manually, type: mvn
+            cxf-codegen:wsdl2java. To run this plugin during Maven's
+            generate-sources phase, un-comment the <executions> elements.
+        -->
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <!--<executions>
+          <execution>
+            <id>generate-pojos</id>
+            <phase>generate-sources</phase>-->
+            <version>2.2.9</version>
+            <configuration>
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${basedir}/../epcis-repository/src/main/resources/wsdl/EPCglobal-epcis-query-1_0.wsdl</wsdl>
+                  <bindingFiles>
+                    <bindingFile>${basedir}/../epcis-repository/src/main/resources/wsdl/bindings-xsd.xjb</bindingFile>
+                    <bindingFile>${basedir}/../epcis-repository/src/main/resources/wsdl/bindings-wsdl.xjb</bindingFile>
+                  </bindingFiles>
+                  <extraargs>
+                    <extraarg>-verbose</extraarg>
+                  </extraargs>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <!--<goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>-->
+      </plugin>
+    </plugins>
+  </build>
+
+
+  <!-- =========================================================== -->
+  <!-- Repositories                                                -->
+  <!-- =========================================================== -->
+
+  <pluginRepositories>
+    <pluginRepository>
+      <!-- for getting the cxf-codegen-plugin libraries -->
+      <id>apache-plugin-incubating</id>
+      <name>Apache Plugin Incubating Repository</name>
+      <url>http://people.apache.org/repo/m2-incubating-repository</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+
+  <!-- =========================================================== -->
+  <!-- Reporting                                                   -->
+  <!-- =========================================================== -->
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <includes>**/*.java</includes>
+          <excludes>org/fosstrak/epcis/soapapi/*.*</excludes>
+          <configLocation>${basedir}/../src/config/epcis_checks.xml</configLocation>
+          <enableRulesSummary>false</enableRulesSummary>
+          <propertyExpansion>samedir=${basedir}/../src/config</propertyExpansion>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.1</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- Can't reliably build site with dependencies report enabled. -->
+              <!-- <report>dependencies</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

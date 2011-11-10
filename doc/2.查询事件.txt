@@ -1,0 +1,69 @@
+1.QueryControlClient
+
+
+// get the query client and poll the query
+String queryUrl = "http://localhost:8080/epcis-repository-[version]/query";
+QueryControlClient client = new QueryControlClient(queryUrl);
+QueryResults results = client.poll(query);
+
+// check results of query
+results.getResultsBody(); // etc.
+
+
+
+
+
+2.how to use the org.fosstrak.epcis.model package to create a Poll instance:
+
+
+
+// construct the query parameters
+QueryParam queryParam1 = new QueryParam();
+queryParam1.setName("eventType");
+ArrayOfString queryParamValue1 = new ArrayOfString();
+queryParamValue1.getString().add("ObjectEvent");
+queryParam1.setValue(queryParamValue1);
+
+QueryParam queryParam2 = new QueryParam();
+queryParam2.setName("MATCH_epc");
+ArrayOfString queryParamValue2 = new ArrayOfString();
+queryParamValue2.getString().add("urn:epc:id:sgtin:0614141.107346.2017");
+queryParam2.setValue(queryParamValue2);
+
+// add the query parameters to the list of parameters
+QueryParams queryParams = new QueryParams();
+queryParams.getParam().add(queryParam1);
+queryParams.getParam().add(queryParam2);
+
+// create the Poll object
+Poll poll = new Poll();
+poll.setQueryName("SimpleEventQuery");
+poll.setParams(queryParams);
+
+
+
+
+
+
+
+
+
+
+
+<epcisq:Poll xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1">
+  <queryName>SimpleEventQuery</queryName>
+  <params>
+    <param>
+      <name>eventType</name>
+      <value>
+        <string>ObjectEvent</string>
+      </value>
+    </param>
+    <param>
+      <name>MATCH_epc</name>
+      <value>
+        <string>urn:epc:id:sgtin:0614141.107346.2017</string>
+      </value>
+    </param>
+  </params>
+</epcisq:Poll>

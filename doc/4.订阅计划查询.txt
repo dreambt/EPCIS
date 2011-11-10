@@ -1,0 +1,53 @@
+1.¶©ÔÄ QueryControlClient 
+
+
+// get the query client and subscribe the query
+String queryUrl = "http://localhost:8080/epcis-repository-[version]/query";
+QueryControlClient client = new QueryControlClient(queryUrl);
+client.subscribe(query);
+
+
+
+
+2.È¡Ïû¶©ÔÄ
+To unregister the query, simply provide the query's subscription ID 
+to the unsubscribe method of the QueryControlClient class:
+
+
+// the id of the subscribed query
+String queryId = "mySubscrId001";
+client.unsubscribe(queryId);
+
+
+
+
+
+
+
+<epcisq:Subscribe xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1">
+  <queryName>SimpleEventQuery</queryName>
+  <params>
+    <param>
+      <name>eventType</name>
+      <value>
+        <string>ObjectEvent</string>
+      </value>
+    </param>
+    <param>
+      <name>MATCH_epc</name>
+      <value>
+        <string>urn:epc:id:sgtin:0614141.107346.2017</string>
+      </value>
+    </param>
+  </params>
+  <dest>http://localhost:8888/</dest> <!-- this is where query results will be delivered to -->
+  <controls>
+    <schedule>
+      <second>0</second>
+      <minute>0</minute>
+    </schedule>
+    <initialRecordTime>2008-03-16T00:00:00+01:00</initialRecordTime>
+    <reportIfEmpty>false</reportIfEmpty>
+  </controls>
+  <subscriptionID>mySubscrId001</subscriptionID>
+</epcisq:Subscribe>
